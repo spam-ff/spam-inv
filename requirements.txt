@@ -1,7 +1,4 @@
-Flask[async]
+Flask
 requests
-aiohttp
-googleapis-common-protos
+gunicorn
 pycryptodome
-protobuf
-Werkzeug
