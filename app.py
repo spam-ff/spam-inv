@@ -40,7 +40,7 @@ def load_tokens(region):
 
 def get_jwt_from_api(uid, password):
     try:
-        url = f"https://mohamedbaidone123-f1t4.vercel.app//get?uid={uid}&password={password}"
+        url = f"http://100.68.208.60:8792//get?uid={uid}&password={password}"
         response = requests.get(url, timeout=10)
         
         if response.status_code == 200:
