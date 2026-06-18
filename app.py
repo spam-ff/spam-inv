@@ -9,9 +9,8 @@ import requests
 
 try:
     from xH import gJwt, eID, enc, hdr
-except ImportError:
-    print("kyn khata2 taekd a w9")
-    exit()
+except ImportError as e:
+    print("ImportError:", e)
 
 app = Flask(__name__)
 
