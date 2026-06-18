@@ -1,5 +1,6 @@
 Flask
 cryptography
 requests
+protobuf
 gunicorn
 pycryptodome
