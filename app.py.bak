@@ -104,20 +104,20 @@ def majorlogin_jwt():
         game_data.timestamp = "2024-12-05 18:15:32"
         game_data.game_name = "free fire"
         game_data.game_version = 1
-        game_data.version_code = "1.123.1"
-        game_data.os_info = "Android OS 9 / API-28 (PQ3B.190801.10101846/G9650ZHU2ARC6)"
+        game_data.version_code = "1.108.3"
+        game_data.os_info = "Android OS 9 / API-28 (PI/rel.cjw.20220518.114133)"
         game_data.device_type = "Handheld"
         game_data.network_provider = "Verizon Wireless"
         game_data.connection_type = "WIFI"
-        game_data.screen_width = 1920
-        game_data.screen_height = 1080
-        game_data.dpi = "280"
-        game_data.cpu_info = "ARM64 FP ASIMD AES VMH | 2865 | 4"
-        game_data.total_ram = 3003
+        game_data.screen_width = 1280
+        game_data.screen_height = 960
+        game_data.dpi = "240"
+        game_data.cpu_info = "ARMv7 VFPv3 NEON VMH | 2400 | 4"
+        game_data.total_ram = 5951
         game_data.gpu_name = "Adreno (TM) 640"
-        game_data.gpu_version = "OpenGL ES 3.1 v1.46"
-        game_data.user_id = "Google|34a7dcdf-a7d5-4cb6-8d7e-3b0e448a0c57"
-        game_data.ip_address = "223.191.51.89"
+        game_data.gpu_version = "OpenGL ES 3.0"
+        game_data.user_id = "Google|74b585a9-0268-4ad3-8f36-ef41d2e53610"
+        game_data.ip_address = "172.190.111.97"
         game_data.language = "en"
         game_data.open_id = open_id
         game_data.access_token = access_token
@@ -129,7 +129,7 @@ def majorlogin_jwt():
         encrypted_data = encrypt_message(serialized_data)
         hex_encrypted_data = binascii.hexlify(encrypted_data).decode('utf-8')
 
-        url = "https://loginbp.ggpolarbear.com/MajorLogin"
+        url = "https://loginbp.ggblueshark.com/MajorLogin"
         headers = {
             "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; ASUS_Z01QD Build/PI)",
             "Connection": "Keep-Alive",
@@ -138,7 +138,7 @@ def majorlogin_jwt():
             "Expect": "100-continue",
             "X-Unity-Version": "2018.4.11f1",
             "X-GA": "v1 1",
-            "ReleaseVersion": "OB53"
+            "ReleaseVersion": "OB52"
         }
         edata = bytes.fromhex(hex_encrypted_data)
 

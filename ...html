@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Account Info</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #0f172a;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-form {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .search-form input {
+            padding: 10px 15px 10px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 250px;
+        }
+
+        .search-form button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3b82f6;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .loading, .error {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .player-info {
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .player-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .player-details h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .player-details p {
+            margin: 5px 0;
+            color: #94a3b8;
+        }
+
+        h3 {
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        .stat-item, .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .item-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Get Account Info</h1>
+            <p>Retrieve detailed player information</p>
+            <form id="searchForm" class="search-form">
+                <div class="input-group">
+                    <span class="input-prefix">#</span>
+                    <input type="text" id="uidInput" placeholder="Enter UID">
+                </div>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">Searching...</div>
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div id="playerInfo" class="player-info" style="display: none;">
+            <!-- Player data will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const searchForm = document.getElementById('searchForm');
+        const uidInput = document.getElementById('uidInput');
+        const loadingDiv = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+        const playerInfoDiv = document.getElementById('playerInfo');
+
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const uid = uidInput.value.trim();
+
+            if (!uid) {
+                alert('Please enter a UID.');
+                return;
+            }
+
+            // Show loading state
+            loadingDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+            playerInfoDiv.style.display = 'none';
+
+            try {
+                // Make a request to our backend server
+                const response = await fetch(`https://S1X-MASRY.vercel.app/info?uid=${uid}`);
+                if (!response.ok) {
+                    throw new Error('Player not found or API error');
+                }
+                const data = await response.json();
+
+                // Populate the player info
+                displayPlayerData(data);
+            } catch (err) {
+                errorDiv.textContent = `Error: ${err.message}`;
+                errorDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        });
+
+        function displayPlayerData(data) {
+            const player = data.basicInfo;
+            const social = data.socialInfo;
+            const clan = data.clanBasicInfo;
+            const profile = data.profileInfo;
+
+            playerInfoDiv.innerHTML = `
+                <div class="player-header">
+                    <img src="https://items.freefire.cfd/item/${player.headPic}" alt="Player" class="player-avatar">
+                    <div class="player-details">
+                        <h2>${player.nickname}</h2>
+                        <p>UID: ${player.accountId}</p>
+                        <p>Level: ${player.level}</p>
+                        <p>Region: ${player.region}</p>
+                    </div>
+                </div>
+
+                <div class="stats-overview">
+                    <h3>Stats Overview</h3>
+                    <div class="stat-item">
+                        <span>EXP:</span> <span>${player.exp.toLocaleString()}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Likes:</span> <span>${player.liked.toLocaleString()}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Honor Score:</span> <span>${data.creditScoreInfo.score}</span>
+                    </div>
+                </div>
+
+                <div class="profile-details">
+                    <h3>Profile Details</h3>
+                    <div class="detail-item">
+                        <span>Region:</span> <span>${profile.region}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Language:</span> <span>Arabic</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Created:</span> <span>${new Date(player.createAt * 1000).toLocaleDateString()}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Last Login:</span> <span>${new Date(player.lastLoginAt * 1000).toLocaleDateString()}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Bio:</span> <span>${social.socialHighlight.replace(/\n/g, '<br>')}</span>
+                    </div>
+                </div>
+
+                <div class="clan-info">
+                    <h3>Clan Info</h3>
+                    <div class="detail-item">
+                        <span>Clan Name:</span> <span>${clan.clanName}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Members:</span> <span>${clan.currentMembers} / ${clan.maxMembers}</span>
+                    </div>
+                </div>
+
+                <div class="equipped-items">
+                    <h3>Equipped Skins</h3>
+                    <div class="items-grid">
+                        ${profile.cosmeticItems.map(itemId => `
+                            <img src="https://items.freefire.cfd/item/${itemId}" alt="Item" class="item-image">
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            playerInfoDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
